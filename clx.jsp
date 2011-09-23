@@ -24,10 +24,19 @@
                 %><p>Found in</p>
     <p><%= codeSource.getLocation().getFile() %></p><%
             }
-        } catch (ClassNotFoundException e) {
+
+            %><p>Classloader hierarchy: </p><%
+    ClassLoader cl = c.getClassLoader();
+    while (cl != null) {
+        %><p><%= cl %></p><%
+        cl = cl.getParent();
+    }
+    %>(Bootstrap class loader)<%
+} catch (ClassNotFoundException e) {
             %><i>Class not found: <%= p %></i><%
         }
     }
+
 
 %>
 
