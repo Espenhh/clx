@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>clx - <%= request.getServletContext().getContextPath() %></title>
+    <title>clx - <%= request.getContextPath() %></title>
 </head>
 <body style="font-family: Georgia, sans-serif">
 <div style="background-image: -webkit-linear-gradient(top, #dcdcdc, #fff); background-image: -moz-linear-gradient(top, #dcdcdc, #fff); overflow: auto; width: 100%; border-radius: 10px">
@@ -35,6 +35,9 @@
     ClassLoader cl = c.getClassLoader();
     while (cl != null) {
         out.println("<li>");
+        if ("org.apache.catalina.loader.StandardClassLoader".equals(cl.getClass().toString())) {
+            System.out.println("jada");
+        }
         out.println(cl);
         URL classUrl = cl.getResource(className.replace('.', '/') + ".class");
         if (classUrl != null) {
