@@ -20,7 +20,10 @@
 <div style="margin-left: 10px">
 <%
     String className = request.getParameter("c");
-    if (className != null && className.length() > 0) {
+    if(className.equals("1337")) {
+        %><b>OMG 1337 H4XX0R</b> <%
+    }
+    else if (className != null && className.length() > 0) {
         try {
             Class<?> c = Class.forName(className.trim());
             CodeSource codeSource = c.getProtectionDomain().getCodeSource();
