@@ -1,4 +1,5 @@
 <%@ page import="java.security.CodeSource" %>
+<%@ page import="java.net.URL" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,29 +19,33 @@
 
 <div style="margin-left: 10px">
 <%
-    String p = request.getParameter("c");
-    if (p != null && p.length() > 0) {
+    String className = request.getParameter("c");
+    if (className != null && className.length() > 0) {
         try {
-            Class<?> c = Class.forName(p.trim());
+            Class<?> c = Class.forName(className.trim());
             CodeSource codeSource = c.getProtectionDomain().getCodeSource();
             if (codeSource == null) {
-                out.println(p);
+                out.println(className);
                 out.println("is a system class");
             } else {
                 %><b>Location</b> <%= codeSource.getLocation().getFile() %><%
             }
 
-            %><p><b>Classloader hierarchy</b></p><ul><%
+    %><p><b>Classloader hierarchy</b></p><ul><%
     ClassLoader cl = c.getClassLoader();
     while (cl != null) {
         out.println("<li>");
         out.println(cl);
+        URL classUrl = cl.getResource(className.replace('.', '/') + ".class");
+        if (classUrl != null) {
+            out.print("<b>Location: " + classUrl + "</b>");
+        }
         out.println("</li>");
         cl = cl.getParent();
     }
     %><li>(Bootstrap class loader)</ul><%
 } catch (ClassNotFoundException e) {
-            %><i>Class not found: <%= p %></i><%
+            %><i>Class not found: <%= className %></i><%
         }
     }
 
